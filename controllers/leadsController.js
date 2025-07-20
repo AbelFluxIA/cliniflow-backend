@@ -1,33 +1,35 @@
 // controllers/leadsController.js
 
-// Vamos criar uma lista de leads de exemplo para testar
-let leadsDeExemplo = [
-  { id: 1, full_name: "Juliano (Exemplo)", email: "juliano@exemplo.com", status: "Novo Contato" },
-  { id: 2, full_name: "Abel de Camargo (Exemplo)", email: "abel@exemplo.com", status: "Qualificado" }
-];
+// Importa a nossa "chave mestra" para o banco de dados
+const db = require('../db');
 
-// Cozinheiro 1: Sabe como buscar e listar todos os leads
-const getAllLeads = (req, res) => {
-  // Por enquanto, ele apenas retorna nossa lista de exemplo
-  res.status(200).json(leadsDeExemplo);
+// Cozinheiro 1: Agora sabe como buscar todos os leads do banco de dados real
+const getAllLeads = async (req, res) => {
+  try {
+    const { rows } = await db.query('SELECT * FROM leads ORDER BY created_at DESC');
+    res.status(200).json(rows);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };
 
-// Cozinheiro 2: Sabe como criar um novo lead
-const createLead = (req, res) => {
+// Cozinheiro 2: Agora sabe como criar um novo lead no banco de dados real
+const createLead = async (req, res) => {
   // Ele pega os dados que o cliente enviou no corpo (body) da requisição
-  const novoLead = req.body;
-  
-  // Adiciona um ID de exemplo
-  novoLead.id = Date.now(); 
+  const { full_name, email, phone_number, source, status, treatment_value, clinic_id } = req.body;
 
-  // Adiciona o novo lead à nossa lista de exemplo
-  leadsDeExemplo.push(novoLead);
-
-  // Retorna uma resposta de sucesso (201 Created) e o lead que foi criado
-  res.status(201).json(novoLead);
+  try {
+    const { rows } = await db.query(
+      'INSERT INTO leads (full_name, email, phone_number, source, status, treatment_value, clinic_id) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *',
+      [full_name, email, phone_number, source, status || 'Novo Contato', treatment_value, clinic_id]
+    );
+    res.status(201).json(rows[0]);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };
 
-// Exportamos nossos cozinheiros para o cardápio poder usá-los
+// Exportamos nossos novos cozinheiros inteligentes
 module.exports = {
   getAllLeads,
   createLead,
