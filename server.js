@@ -1,6 +1,11 @@
+// server.js
+
 // Importa as ferramentas essenciais que instalamos
 const express = require('express');
 const cors = require('cors');
+
+// ADICIONE ESTA LINHA PARA IMPORTAR NOSSO NOVO CARDÁPIO
+const leadsRouter = require('./routes/leads');
 
 // Cria o nosso "servidor" de API
 const app = express();
@@ -9,14 +14,17 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 // Configura os "middlewares" - regras que rodam antes de cada requisição
-app.use(cors()); // Permite que nosso frontend (em outro endereço) possa conversar com a API
-app.use(express.json()); // Permite que a API entenda o formato JSON
+app.use(cors());
+app.use(express.json());
 
-// --- Nossas Rotas da API virão aqui no futuro ---
-// Por enquanto, vamos criar uma rota de teste para ver se o servidor está no ar
+// --- Nossas Rotas da API ---
 app.get('/', (req, res) => {
   res.status(200).json({ message: 'API do CliniFlow está no ar e funcionando!' });
 });
+
+// ADICIONE ESTA LINHA PARA DIZER AO SERVIDOR PARA USAR O CARDÁPIO DE LEADS
+app.use('/api/v1', leadsRouter);
+
 
 // "Liga" o servidor e o coloca para escutar por requisições na porta definida
 app.listen(PORT, () => {
