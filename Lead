@@ -1,0 +1,97 @@
+{
+  "name": "Lead",
+  "type": "object",
+  "properties": {
+    "full_name": {
+      "type": "string",
+      "description": "Nome completo do lead"
+    },
+    "phone_number": {
+      "type": "string",
+      "description": "Número de telefone"
+    },
+    "email": {
+      "type": "string",
+      "format": "email",
+      "description": "Email do lead"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "novo",
+        "qualificado",
+        "proposta",
+        "negociacao",
+        "fechado",
+        "perdido"
+      ],
+      "default": "novo",
+      "description": "Status atual do lead"
+    },
+    "source": {
+      "type": "string",
+      "enum": [
+        "instagram",
+        "facebook",
+        "google",
+        "indicacao",
+        "whatsapp",
+        "website",
+        "manual"
+      ],
+      "default": "manual",
+      "description": "Origem do lead"
+    },
+    "treatment_value": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Valor estimado do tratamento"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Observações sobre o lead"
+    },
+    "interest_level": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 5,
+      "default": 3,
+      "description": "Nível de interesse (1-5)"
+    },
+    "consultation_count": {
+      "type": "integer",
+      "minimum": 0,
+      "default": 0,
+      "description": "Número de consultas realizadas"
+    },
+    "conversation_history": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "message": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "call",
+              "email",
+              "whatsapp",
+              "visit"
+            ]
+          }
+        }
+      },
+      "default": [],
+      "description": "Histórico de conversas"
+    }
+  },
+  "required": [
+    "full_name"
+  ]
+}

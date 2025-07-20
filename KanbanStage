@@ -1,0 +1,28 @@
+{
+  "name": "KanbanStage",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Nome da etapa do funil"
+    },
+    "status_id": {
+      "type": "string",
+      "description": "ID único para o status, derivado do nome"
+    },
+    "order": {
+      "type": "integer",
+      "description": "Ordem de exibição da etapa no Kanban"
+    },
+    "color": {
+      "type": "string",
+      "default": "#e2e8f0",
+      "description": "Cor do cabeçalho da coluna no Kanban"
+    }
+  },
+  "required": [
+    "name",
+    "status_id",
+    "order"
+  ]
+}
